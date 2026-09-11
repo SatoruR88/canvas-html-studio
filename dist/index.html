@@ -14,7 +14,7 @@
         <div class="brand-mark" aria-hidden="true">C</div>
         <div>
           <div class="brand-name">Canvas</div>
-          <div class="file-name"><span id="fileName">product-page.html</span><span class="saved-dot" id="savedDot" aria-hidden="true"></span><span id="saveLabel">端末に保存済み</span></div>
+          <div class="file-name"><span id="fileName">product-page.html</span><span class="saved-dot" id="savedDot" aria-hidden="true"></span><span id="saveLabel">端末に保存済み</span><span class="desktop-only save-location" id="saveLocation" hidden></span></div>
         </div>
       </div>
       <nav class="history-actions" aria-label="編集履歴と表示">
@@ -25,16 +25,22 @@
         <button class="icon-btn" id="mobileBtn" title="モバイル表示" aria-label="モバイル表示">▯</button>
       </nav>
       <div class="top-actions">
-        <input id="fileInput" type="file" accept=".html,.htm,.css,.zip,text/html,text/css,application/zip" multiple hidden />
+        <input id="fileInput" type="file" accept=".html,.htm,.css,.md,.markdown,.zip,text/html,text/css,text/markdown,application/zip" multiple hidden />
         <input id="folderInput" type="file" webkitdirectory multiple hidden />
         <input id="assetInput" type="file" accept="image/*,.svg,.woff,.woff2,.ttf,.otf" multiple hidden />
         <button class="secondary-btn" id="importBtn"><span aria-hidden="true">＋</span> 読み込む</button>
         <div class="import-menu" id="importMenu" aria-hidden="true">
-          <button data-import="files"><strong>ファイルを選択</strong><span>HTML・CSS・ZIP</span></button>
+          <button data-import="files"><strong>ファイルを選択</strong><span>HTML・Markdown・CSS・ZIP</span></button>
           <button data-import="folder"><strong>フォルダを開く</strong><span>画像やフォントもまとめて</span></button>
         </div>
+        <button class="secondary-btn" id="searchBtn" title="検索と置換（Ctrl+F）" aria-keyshortcuts="Control+F"><span aria-hidden="true">⌕</span> 検索</button>
         <button class="secondary-btn" id="codeBtn"><span aria-hidden="true">&lt;/&gt;</span> コード</button>
+        <button class="secondary-btn" id="checkBtn"><span aria-hidden="true">✓</span> チェック</button>
+        <button class="icon-btn help-btn" id="helpBtn" title="操作ガイド（F1）" aria-label="操作ガイド" aria-keyshortcuts="F1">?</button>
+        <button class="icon-btn settings-btn" id="settingsBtn" title="設定" aria-label="設定">⚙</button>
         <button class="secondary-btn preview-btn" id="previewBtn"><span aria-hidden="true">◉</span> プレビュー</button>
+        <button class="primary-btn desktop-only" id="saveBtn" hidden>上書き保存 <span aria-hidden="true">Ctrl+S</span></button>
+        <button class="secondary-btn desktop-only save-as-btn" id="saveAsBtn" hidden title="別のフォルダーへ保存（Ctrl+Shift+S）">別名保存</button>
         <button class="primary-btn" id="exportBtn">ZIP書き出し <span aria-hidden="true">↓</span></button>
       </div>
     </header>
@@ -46,26 +52,35 @@
       <button class="rail-item" data-add="button"><span class="rail-icon">▭</span><span>ボタン</span></button>
       <button class="rail-item" data-add="divider"><span class="rail-icon">―</span><span>区切り線</span></button>
       <button class="rail-item" id="assetsBtn"><span class="rail-icon">◇</span><span>素材</span><span class="warning-badge" id="assetBadge" hidden>0</span></button>
+      <button class="rail-item" id="outlineBtn"><span class="rail-icon">☷</span><span>見出し</span></button>
       <div class="rail-spacer"></div>
       <button class="rail-item" id="layersBtn"><span class="rail-icon">▱</span><span>DOM</span></button>
     </aside>
 
     <main class="workspace">
       <div class="workspace-toolbar">
-        <div class="breadcrumbs"><span>ページ</span><span>/</span><strong id="crumbName">product-page.html</strong></div>
-        <div class="drop-hint">フォルダまたはZIPをここへドロップ</div>
+        <div class="page-switcher" aria-label="ページ">
+          <div class="page-tabs" id="pageTabs" role="tablist"></div>
+          <button class="add-page-btn" id="addPageBtn" title="ページを追加" aria-label="ページを追加">＋</button>
+          <button class="add-page-btn" id="managePageBtn" title="現在のページを管理" aria-label="現在のページを管理">•••</button>
+          <strong id="crumbName" hidden>product-page.html</strong>
+        </div>
+        <div class="drop-hint">Markdown・フォルダ・ZIPをここへドロップ</div>
         <div class="zoom-control">
           <button id="zoomOut" aria-label="縮小">−</button><span id="zoomLabel">86%</span><button id="zoomIn" aria-label="拡大">＋</button>
         </div>
       </div>
       <div class="stage" id="stage">
-        <div class="drop-overlay" id="dropOverlay"><strong>Webサイト一式をドロップ</strong><span>フォルダ・ZIP・HTML/CSSに対応</span></div>
+        <div class="drop-overlay" id="dropOverlay"><strong>ファイルまたはWebサイト一式をドロップ</strong><span>Markdown・フォルダ・ZIP・HTML/CSSに対応</span></div>
         <div class="page-wrap" id="pageWrap">
           <div class="page-badge">LIVE DOCUMENT · <span id="viewportLabel">DESKTOP</span></div>
           <div class="page-surface" id="pageSurface">
             <iframe id="canvasFrame" title="HTML編集キャンバス" sandbox="allow-same-origin"></iframe>
+            <div class="snap-guide vertical" id="snapGuideX" aria-hidden="true"></div>
+            <div class="snap-guide horizontal" id="snapGuideY" aria-hidden="true"></div>
             <div class="selection-overlay" id="selectionOverlay" aria-hidden="true">
               <button class="selection-label" id="moveHandle" title="ドラッグして移動">H1 · 見出し</button>
+              <span class="selection-metrics" id="selectionMetrics"></span>
               <span class="resize-handle nw" data-resize="nw"></span><span class="resize-handle ne" data-resize="ne"></span>
               <span class="resize-handle sw" data-resize="sw"></span><span class="resize-handle se" data-resize="se"></span>
             </div>
@@ -80,10 +95,83 @@
         <button class="more-btn" id="focusDomBtn" aria-label="DOMツリーで表示">▱</button>
       </div>
       <section class="property-section">
-        <h3>配置</h3>
+        <h3>テキスト配置</h3>
         <div class="align-grid" role="group" aria-label="テキスト配置">
           <button class="active" data-align="left">≡</button><button data-align="center">≣</button><button data-align="right">≡</button><button data-align="justify">☷</button>
         </div>
+      </section>
+      <section class="property-section object-actions" id="objectActions">
+        <h3>整列と配置</h3>
+        <div class="object-align-grid" role="group" aria-label="選択した要素を整列">
+          <button data-object-align="left" title="左揃え">左</button><button data-object-align="center" title="左右中央揃え">左右中央</button><button data-object-align="right" title="右揃え">右</button>
+          <button data-object-align="top" title="上揃え">上</button><button data-object-align="middle" title="上下中央揃え">上下中央</button><button data-object-align="bottom" title="下揃え">下</button>
+        </div>
+        <div class="object-distribute-grid" role="group" aria-label="選択した要素を等間隔に配置">
+          <button data-distribute="horizontal">↔ 横に等間隔</button><button data-distribute="vertical">↕ 縦に等間隔</button>
+        </div>
+        <div class="object-order-grid" role="group" aria-label="要素の重なり順">
+          <button data-order="back" title="一番後ろへ">最背面</button><button data-order="backward" title="ひとつ後ろへ">後へ</button><button data-order="forward" title="ひとつ前へ">前へ</button><button data-order="front" title="一番前へ">最前面</button>
+        </div>
+      </section>
+      <section class="property-section object-state-section">
+        <h3>選択状態</h3>
+        <div class="object-state-grid">
+          <button id="lockSelectionBtn">ロック</button><button id="hideSelectionBtn">非表示</button><button id="groupSelectionBtn">グループ化</button><button id="ungroupSelectionBtn">解除</button>
+        </div>
+        <p class="scope-note">ロック・非表示は編集画面だけに適用されます</p>
+      </section>
+      <section class="property-section">
+        <h3>クラス</h3>
+        <div class="class-add"><input id="classInput" type="text" placeholder="例: hero-title" aria-label="追加するクラス名"><button id="addClassBtn">追加</button></div>
+        <div class="class-chips" id="classChips"><span class="empty-hint">クラスなし</span></div>
+      </section>
+      <section class="property-section">
+        <h3>編集する画面</h3>
+        <div class="scope-grid" role="group" aria-label="スタイルの適用画面">
+          <button class="active" data-style-scope="base">共通</button><button data-style-scope="desktop">PC</button><button data-style-scope="mobile">スマホ</button>
+        </div>
+        <p class="scope-note" id="scopeNote">要素へ直接適用します</p>
+      </section>
+      <section class="property-section" id="elementSection">
+        <h3>要素</h3>
+        <label>ID<input id="elementId" type="text" placeholder="例: main-title"></label>
+        <label class="conditional-field" id="headingField" hidden>見出しレベル<select id="headingLevel"><option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4">H4</option><option value="H5">H5</option><option value="H6">H6</option></select></label>
+        <div class="conditional-field" id="linkFields" hidden>
+          <label>リンク先<input id="linkHref" type="text" placeholder="about.html または https://..."></label>
+          <label class="check-label"><input id="linkBlank" type="checkbox"> 新しいタブで開く</label>
+        </div>
+        <div class="conditional-field" id="imageFields" hidden>
+          <label>画像パス<input id="imageSrc" type="text" placeholder="assets/photo.jpg"></label>
+          <label>代替テキスト<input id="imageAlt" type="text" placeholder="画像の内容を説明"></label>
+          <button class="wide-reset" id="openAssetsForImage">素材から画像を選ぶ</button>
+        </div>
+      </section>
+      <section class="property-section image-edit-section" id="imageEditSection" hidden>
+        <div class="section-title-row"><h3>画像編集</h3><button class="reset-link" id="resetImageEdit">リセット</button></div>
+        <div class="image-asset-info" id="imageAssetInfo"></div>
+        <label>枠への合わせ方<select id="imageFit"><option value="auto">元の比率</option><option value="cover">トリミングして塗りつぶす</option><option value="contain">全体を枠内に収める</option><option value="fill">枠に合わせて伸縮</option><option value="scale-down">大きい場合だけ縮小</option></select></label>
+        <span class="image-control-label">トリミング比率</span>
+        <div class="image-ratio-grid" role="group" aria-label="画像のトリミング比率"><button data-image-ratio="1">1:1</button><button data-image-ratio="1.333333">4:3</button><button data-image-ratio="1.777778">16:9</button><button data-image-ratio="original">元画像</button></div>
+        <div class="image-slider-row"><label>焦点・横 <output id="imagePositionXValue">50%</output><input id="imagePositionX" type="range" min="0" max="100" value="50"></label><label>焦点・縦 <output id="imagePositionYValue">50%</output><input id="imagePositionY" type="range" min="0" max="100" value="50"></label></div>
+        <div class="field-pair"><label>回転<div class="input-unit"><input id="imageRotate" type="number" min="-180" max="180" value="0"><span>°</span></div></label><div><span class="image-control-label compact">反転</span><div class="image-flip-grid"><button id="imageFlipX">左右</button><button id="imageFlipY">上下</button></div></div></div>
+        <div class="image-slider-row"><label>透明度 <output id="imageOpacityValue">100%</output><input id="imageOpacity" type="range" min="0" max="100" value="100"></label><label>明るさ <output id="imageBrightnessValue">100%</output><input id="imageBrightness" type="range" min="0" max="200" value="100"></label><label>コントラスト <output id="imageContrastValue">100%</output><input id="imageContrast" type="range" min="0" max="200" value="100"></label></div>
+        <p class="scope-note">元画像は変更せず、HTMLの表示設定として保存します</p>
+      </section>
+      <section class="property-section">
+        <div class="section-title-row"><h3>レイアウト</h3><button class="reset-link" id="resetLayout">リセット</button></div>
+        <div class="field-pair">
+          <label>表示<select id="displayMode"><option value="block">Block</option><option value="flex">Flex</option><option value="grid">Grid</option><option value="inline-block">Inline block</option><option value="none">非表示</option></select></label>
+          <label>間隔<div class="input-unit"><input id="layoutGap" type="number" min="0"><span>px</span></div></label>
+        </div>
+        <div class="field-pair">
+          <label>方向<select id="flexDirection"><option value="row">横</option><option value="column">縦</option><option value="row-reverse">横・逆</option><option value="column-reverse">縦・逆</option></select></label>
+          <label>折り返し<select id="flexWrap"><option value="nowrap">なし</option><option value="wrap">あり</option></select></label>
+        </div>
+        <div class="field-pair">
+          <label>主軸<select id="justifyContent"><option value="flex-start">先頭</option><option value="center">中央</option><option value="flex-end">末尾</option><option value="space-between">両端</option><option value="space-around">均等</option></select></label>
+          <label>交差軸<select id="alignItems"><option value="stretch">伸ばす</option><option value="flex-start">先頭</option><option value="center">中央</option><option value="flex-end">末尾</option></select></label>
+        </div>
+        <label>Grid列<select id="gridColumns"><option value="none">自動</option><option value="repeat(2, minmax(0, 1fr))">2列</option><option value="repeat(3, minmax(0, 1fr))">3列</option><option value="repeat(4, minmax(0, 1fr))">4列</option></select></label>
       </section>
       <section class="property-section">
         <div class="section-title-row"><h3>タイポグラフィ</h3><button class="reset-link" id="resetType">リセット</button></div>
@@ -99,6 +187,14 @@
           <label>字間<div class="input-unit"><input id="letterSpacing" type="number" min="-20" max="50"><span>px</span></div></label>
         </div>
       </section>
+      <section class="property-section text-selection-section">
+        <h3>部分テキスト</h3>
+        <p class="scope-note" id="textSelectionStatus">文字をダブルクリックし、範囲を選択してください</p>
+        <div class="inline-format-grid">
+          <button id="selectionBoldBtn" title="太字"><strong>B</strong></button><button id="selectionItalicBtn" title="斜体"><em>I</em></button><button id="selectionUnderlineBtn" title="下線"><u>U</u></button><input id="selectionColor" type="color" value="#151823" aria-label="選択範囲の文字色">
+        </div>
+        <div class="selection-link-row"><input id="selectionLinkInput" type="text" placeholder="リンク先URL"><button id="selectionLinkBtn">リンク化</button></div>
+      </section>
       <section class="property-section">
         <h3>サイズと位置</h3>
         <div class="field-pair">
@@ -112,16 +208,27 @@
         <button class="wide-reset" id="resetPosition">位置とサイズを自動に戻す</button>
       </section>
       <section class="property-section">
-        <h3>カラー</h3>
-        <div class="color-control"><input type="color" id="textColor" value="#151823" aria-label="文字色"><input type="text" id="colorHex" value="#151823" aria-label="カラーコード"><span>100%</span></div>
+        <h3>外観</h3>
+        <div class="color-control"><input type="color" id="textColor" value="#151823" aria-label="文字色"><input type="text" id="colorHex" value="#151823" aria-label="カラーコード"><span>文字</span></div>
+        <div class="color-control secondary-color"><input type="color" id="backgroundColor" value="#ffffff" aria-label="背景色"><input type="text" id="backgroundHex" value="#ffffff" aria-label="背景カラーコード"><span>背景</span></div>
+        <div class="field-pair">
+          <label>枠線<div class="input-unit"><input id="borderWidth" type="number" min="0"><span>px</span></div></label>
+          <label>角丸<div class="input-unit"><input id="borderRadius" type="number" min="0"><span>px</span></div></label>
+        </div>
+        <label>枠線色<div class="color-control compact-color"><input type="color" id="borderColor" value="#d5d9e1"><input type="text" id="borderHex" value="#d5d9e1" aria-label="枠線カラーコード"></div></label>
       </section>
       <section class="property-section">
         <h3>余白</h3>
-        <div class="spacing-grid">
-          <label><span>上</span><input id="marginTop" type="number"><small>px</small></label><label><span>下</span><input id="marginBottom" type="number"><small>px</small></label>
+        <span class="spacing-label">外側</span>
+        <div class="spacing-grid four-way">
+          <label><span>上</span><input id="marginTop" type="number"><small>px</small></label><label><span>右</span><input id="marginRight" type="number"><small>px</small></label><label><span>下</span><input id="marginBottom" type="number"><small>px</small></label><label><span>左</span><input id="marginLeft" type="number"><small>px</small></label>
+        </div>
+        <span class="spacing-label">内側</span>
+        <div class="spacing-grid four-way">
+          <label><span>上</span><input id="paddingTop" type="number"><small>px</small></label><label><span>右</span><input id="paddingRight" type="number"><small>px</small></label><label><span>下</span><input id="paddingBottom" type="number"><small>px</small></label><label><span>左</span><input id="paddingLeft" type="number"><small>px</small></label>
         </div>
       </section>
-      <div class="properties-footer"><button id="duplicateBtn">複製</button><button id="deleteBtn" class="danger">削除</button></div>
+      <div class="properties-footer"><button id="copyBtn">コピー</button><button id="pasteBtn">貼り付け</button><button id="duplicateBtn">複製</button><button id="deleteBtn" class="danger">削除</button></div>
     </aside>
 
     <div class="code-drawer" id="codeDrawer" aria-hidden="true">
@@ -136,6 +243,11 @@
       <div id="layersList"></div>
     </div>
 
+    <div class="outline-popover" id="outlinePopover" aria-hidden="true">
+      <div class="outline-head"><div><span class="section-kicker">文書ナビゲーション</span><h3>見出しアウトライン</h3></div><span id="outlineCount"></span></div>
+      <div class="outline-list" id="outlineList"></div>
+    </div>
+
     <div class="assets-popover" id="assetsPopover" aria-hidden="true">
       <div class="assets-head">
         <div><span class="section-kicker">端末内の素材</span><h3>アセット</h3></div>
@@ -146,8 +258,161 @@
       <div class="asset-grid" id="assetGrid"></div>
       <div class="asset-files" id="assetFiles"></div>
     </div>
+
+    <div class="start-screen" id="startScreen">
+      <section class="start-card" aria-labelledby="startTitle">
+        <div class="start-brand"><div class="brand-mark">C</div><span>Canvas HTML Studio</span></div>
+        <h1 id="startTitle">何を編集しますか？</h1>
+        <p>端末内のHTMLやMarkdownを開くか、新しいページから始められます。</p>
+        <div class="start-actions">
+          <button class="start-primary" id="startOpenBtn"><strong>フォルダーを開く</strong><span>HTML・Markdownを編集</span></button>
+          <button id="startSampleBtn"><strong>サンプルから開始</strong><span>操作をすぐに試す</span></button>
+          <button id="startBlankBtn"><strong>空のページを作成</strong><span>最小構成から始める</span></button>
+        </div>
+        <div class="start-steps" aria-label="基本操作">
+          <div><span>1</span><strong>開く</strong><small>HTML・Markdown・ZIP・フォルダー</small></div>
+          <div><span>2</span><strong>直接編集</strong><small>要素を選び、右側で見た目を調整</small></div>
+          <div><span>3</span><strong>保存</strong><small>アプリ版はCtrl+S、Web版はZIP</small></div>
+        </div>
+        <button class="start-guide-button" id="startGuideBtn" type="button">操作ガイドとショートカットを見る</button>
+        <div class="recovery-callout" id="recoveryCallout" hidden>
+          <div><strong>前回の編集を復元できます</strong><span id="recoveryTime"></span></div>
+          <button id="restoreLatestBtn">復元</button><button id="openRecoveryBtn">履歴</button>
+        </div>
+        <div class="start-recents" id="startRecentProjects" hidden><h2>最近使ったフォルダー</h2><div id="startRecentList"></div></div>
+      </section>
+    </div>
+
+    <dialog class="app-dialog" id="pageDialog">
+      <form method="dialog" id="pageForm">
+        <div class="dialog-head"><div><span class="section-kicker">ページ</span><h2>新しいHTMLページ</h2></div><button value="cancel" aria-label="閉じる">×</button></div>
+        <label>ファイル名<input id="pageNameInput" type="text" value="about.html" autocomplete="off" required></label>
+        <p class="dialog-error" id="pageError" role="alert"></p>
+        <div class="dialog-actions"><button value="cancel">キャンセル</button><button class="primary-btn" id="createPageBtn" value="default">作成</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog" id="pageManageDialog">
+      <form method="dialog" id="pageManageForm">
+        <div class="dialog-head"><div><span class="section-kicker">ページ管理</span><h2 id="managePageHeading">現在のページ</h2></div><button value="cancel" aria-label="閉じる">×</button></div>
+        <label>ファイル名<input id="managePageName" type="text" autocomplete="off" required></label>
+        <label>ページタイトル<input id="managePageTitle" type="text" autocomplete="off"></label>
+        <label class="dialog-check"><input id="homePageCheck" type="checkbox"> このページをホームページにする</label>
+        <p class="dialog-error" id="managePageError" role="alert"></p>
+        <div class="dialog-actions spread-actions"><div><button type="button" id="duplicatePageBtn">ページを複製</button><button type="button" class="danger-text" id="deletePageBtn">削除</button></div><div><button value="cancel">キャンセル</button><button class="primary-btn" value="default">保存</button></div></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog check-dialog" id="checkDialog">
+      <div class="dialog-head"><div><span class="section-kicker">書き出し前</span><h2>プロジェクトチェック</h2></div><button id="closeCheckBtn" aria-label="閉じる">×</button></div>
+      <div class="check-summary" id="checkSummary"></div>
+      <div class="check-list" id="checkList"></div>
+      <div class="dialog-actions"><button id="repairReferencesBtn">参照切れを修正</button><button id="closeCheckAction">編集に戻る</button><button class="primary-btn" id="forceExportBtn">このままZIP書き出し</button></div>
+    </dialog>
+
+    <dialog class="app-dialog search-dialog" id="searchDialog">
+      <form id="searchForm">
+        <div class="dialog-head"><div><span class="section-kicker">文書編集</span><h2>検索と置換</h2></div><button type="button" id="closeSearchBtn" aria-label="閉じる">×</button></div>
+        <div class="search-fields">
+          <label>検索<input id="searchInput" type="search" autocomplete="off" placeholder="検索する文字"></label>
+          <label>置換<input id="replaceInput" type="text" autocomplete="off" placeholder="置き換え後の文字"></label>
+          <div class="search-options"><label>範囲<select id="searchScope"><option value="current">現在のページ</option><option value="all">すべてのページ</option></select></label><label class="dialog-check"><input id="searchCaseCheck" type="checkbox"> 大文字・小文字を区別</label></div>
+        </div>
+        <div class="search-summary" id="searchSummary">検索する文字を入力してください</div>
+        <div class="search-results" id="searchResults"></div>
+        <div class="dialog-actions"><button type="button" id="replaceAllBtn">すべて置換</button><button type="button" class="primary-btn" id="closeSearchAction">閉じる</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog reference-dialog" id="referenceDialog">
+      <div class="dialog-head"><div><span class="section-kicker">参照の修正</span><h2>リンク・画像の参照切れ</h2></div><button id="closeReferenceBtn" aria-label="閉じる">×</button></div>
+      <p class="reference-summary" id="referenceSummary"></p>
+      <div class="reference-list" id="referenceList"></div>
+      <div class="dialog-actions"><button class="primary-btn" id="closeReferenceAction">閉じる</button></div>
+    </dialog>
+
+    <dialog class="app-dialog" id="settingsDialog">
+      <form method="dialog" id="settingsForm">
+        <div class="dialog-head"><div><span class="section-kicker">この端末</span><h2>アプリ設定</h2></div><button value="cancel" aria-label="閉じる">×</button></div>
+        <label>外観<select id="themeSetting"><option value="light">ライト</option><option value="dark">ダーク</option><option value="system">システムに合わせる</option></select></label>
+        <label>自動保存<select id="autosaveSetting"><option value="350">すぐに保存</option><option value="1000">1秒後</option><option value="3000">3秒後</option></select></label>
+        <label>起動時の表示<select id="viewportSetting"><option value="desktop">デスクトップ</option><option value="mobile">モバイル</option></select></label>
+        <label>初期ズーム<input id="zoomSetting" type="number" min="50" max="120" step="1"><span class="input-suffix">%</span></label>
+        <section class="app-info" aria-labelledby="appInfoTitle">
+          <div><h3 id="appInfoTitle">Canvas HTML Studio</h3><span>バージョン <strong id="appVersion">0.1.0</strong></span></div>
+          <p>一人で使うローカル編集アプリです。開いたサイトとバックアップは端末内で処理し、共有機能やアカウント連携は使用しません。</p>
+        </section>
+        <div class="dialog-actions"><button id="resetSettingsBtn" value="cancel">初期値に戻す</button><button class="primary-btn" value="default">保存</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog help-dialog" id="helpDialog" aria-labelledby="helpTitle" aria-describedby="helpSummary">
+      <div class="dialog-head"><div><span class="section-kicker">ヘルプ</span><h2 id="helpTitle">操作ガイド</h2></div><button id="closeHelpBtn" aria-label="閉じる">×</button></div>
+      <div class="help-content">
+        <p id="helpSummary">読み込み、編集、確認、保存の順に進めれば、元のHTMLを保ちながら作業できます。</p>
+        <ol class="help-flow">
+          <li><strong>サイトを読み込む</strong><span>HTML、Markdown、ZIP、またはフォルダーを選びます。</span></li>
+          <li><strong>キャンバスで編集する</strong><span>要素を選択し、右側の設定やドラッグ操作で調整します。</span></li>
+          <li><strong>チェックして保存する</strong><span>参照切れなどを確認してから、上書き保存またはZIP書き出しを行います。</span></li>
+        </ol>
+        <section class="shortcut-section" aria-labelledby="shortcutTitle">
+          <h3 id="shortcutTitle">ショートカット</h3>
+          <dl class="shortcut-grid">
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>S</kbd></dt><dd>上書き保存</dd></div>
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>Shift</kbd>＋<kbd>S</kbd></dt><dd>別名保存</dd></div>
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>Z</kbd></dt><dd>元に戻す</dd></div>
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>Shift</kbd>＋<kbd>Z</kbd></dt><dd>やり直す</dd></div>
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>F</kbd></dt><dd>検索と置換</dd></div>
+            <div><dt><kbd>Ctrl</kbd>＋<kbd>D</kbd></dt><dd>要素を複製</dd></div>
+            <div><dt><kbd>矢印</kbd></dt><dd>1px移動（Shiftで10px）</dd></div>
+            <div><dt><kbd>F1</kbd></dt><dd>このガイドを開く</dd></div>
+          </dl>
+        </section>
+      </div>
+      <div class="dialog-actions"><button class="primary-btn" id="closeHelpAction">編集に戻る</button></div>
+    </dialog>
+
+    <dialog class="app-dialog import-error-dialog" id="importErrorDialog" aria-labelledby="importErrorTitle" aria-describedby="importErrorMessage">
+      <div class="dialog-head"><div><span class="section-kicker">読み込みを中止しました</span><h2 id="importErrorTitle">ファイルを開けません</h2></div><button id="closeImportErrorBtn" aria-label="閉じる">×</button></div>
+      <div class="import-error-content">
+        <p id="importErrorMessage" role="alert"></p>
+        <p>現在編集中の内容は変更されていません。ファイルを確認してから、もう一度読み込んでください。</p>
+      </div>
+      <div class="dialog-actions"><button class="primary-btn" id="closeImportErrorAction">閉じる</button></div>
+    </dialog>
+
+    <dialog class="app-dialog markdown-dialog" id="markdownDialog">
+      <form id="markdownForm">
+        <div class="dialog-head"><div><span class="section-kicker">Markdown読み込み</span><h2>文書デザインを選択</h2></div><button type="button" id="cancelMarkdownIcon" aria-label="閉じる">×</button></div>
+        <p class="markdown-dialog-summary" id="markdownImportSummary"></p>
+        <fieldset class="markdown-theme-grid">
+          <legend>変換後のスタイル</legend>
+          <label><input type="radio" name="markdownTheme" value="document" checked><span><strong>シンプル文書</strong><small>読みやすい白い紙面</small></span></label>
+          <label><input type="radio" name="markdownTheme" value="technical"><span><strong>技術ドキュメント</strong><small>目次を横に配置</small></span></label>
+          <label><input type="radio" name="markdownTheme" value="blog"><span><strong>ブログ記事</strong><small>温かみのある記事面</small></span></label>
+          <label><input type="radio" name="markdownTheme" value="readme"><span><strong>README</strong><small>GitHub風の端正な表示</small></span></label>
+        </fieldset>
+        <label class="dialog-check"><input id="markdownTocCheck" type="checkbox" checked> 見出しから目次を自動作成</label>
+        <p class="markdown-safety-note">元のMarkdownは素材として残ります。生HTMLやスクリプトは安全のため文字として変換します。</p>
+        <div class="dialog-actions"><button type="button" id="cancelMarkdownBtn">キャンセル</button><button class="primary-btn" type="submit">HTMLに変換</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog recovery-dialog" id="recoveryDialog">
+      <div class="dialog-head"><div><span class="section-kicker">バックアップ</span><h2>復元履歴</h2></div><button id="closeRecoveryBtn" aria-label="閉じる">×</button></div>
+      <section class="disk-backup-section desktop-only" id="diskBackupSection" hidden>
+        <div class="recovery-section-head"><strong>フォルダー保存前</strong><span>上書き前のファイルと現在の差分</span></div>
+        <div class="disk-backup-list" id="diskBackupList"></div>
+      </section>
+      <div class="recovery-section-head browser-recovery-head"><strong>編集中の自動保存</strong><span>アプリ内に残っている編集状態</span></div>
+      <div class="recovery-list" id="recoveryList"></div>
+      <div class="dialog-actions"><button id="clearRecoveryBtn">履歴を消去</button><button class="primary-btn" id="closeRecoveryAction">閉じる</button></div>
+    </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
+  <script src="safety.js"></script>
+  <script src="markdown.js"></script>
   <script src="app.js"></script>
+  <script src="desktop.js"></script>
 </body>
 </html>
