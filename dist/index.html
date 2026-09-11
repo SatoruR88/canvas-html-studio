@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="HTMLを紙面のように直接編集できるビジュアルエディター" />
+  <title>Canvas HTML Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">C</div>
+        <div>
+          <div class="brand-name">Canvas</div>
+          <div class="file-name"><span id="fileName">product-page.html</span><span class="saved-dot" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <nav class="history-actions" aria-label="編集履歴">
+        <button class="icon-btn" id="undoBtn" title="元に戻す" aria-label="元に戻す">↶</button>
+        <button class="icon-btn" id="redoBtn" title="やり直す" aria-label="やり直す">↷</button>
+        <span class="divider"></span>
+        <button class="icon-btn" id="desktopBtn" title="デスクトップ表示" aria-label="デスクトップ表示">▰</button>
+        <button class="icon-btn" id="mobileBtn" title="モバイル表示" aria-label="モバイル表示">▯</button>
+      </nav>
+
+      <div class="top-actions">
+        <button class="secondary-btn" id="codeBtn"><span aria-hidden="true">&lt;/&gt;</span> コード</button>
+        <button class="secondary-btn" id="previewBtn"><span aria-hidden="true">◉</span> プレビュー</button>
+        <button class="primary-btn" id="exportBtn">書き出す <span aria-hidden="true">↓</span></button>
+      </div>
+    </header>
+
+    <aside class="tool-rail" aria-label="編集ツール">
+      <button class="rail-item active" data-panel="select"><span class="rail-icon">↖</span><span>選択</span></button>
+      <button class="rail-item" data-add="heading"><span class="rail-icon">T</span><span>見出し</span></button>
+      <button class="rail-item" data-add="text"><span class="rail-icon">¶</span><span>テキスト</span></button>
+      <button class="rail-item" data-add="button"><span class="rail-icon">▭</span><span>ボタン</span></button>
+      <button class="rail-item" data-add="divider"><span class="rail-icon">―</span><span>区切り線</span></button>
+      <div class="rail-spacer"></div>
+      <button class="rail-item" id="layersBtn"><span class="rail-icon">▱</span><span>レイヤー</span></button>
+    </aside>
+
+    <main class="workspace">
+      <div class="workspace-toolbar">
+        <div class="breadcrumbs"><span>ページ 1</span><span>/</span><strong>メイン</strong></div>
+        <div class="zoom-control">
+          <button id="zoomOut" aria-label="縮小">−</button>
+          <span id="zoomLabel">86%</span>
+          <button id="zoomIn" aria-label="拡大">＋</button>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <article class="page" id="canvasPage" aria-label="HTML編集キャンバス">
+          <div class="page-badge">PAGE 01</div>
+          <header class="doc-header editable-block" data-type="header" data-label="ヘッダー">
+            <div class="logo-lockup">
+              <span class="logo-glyph">N</span>
+              <span>NORTHLINE</span>
+            </div>
+            <nav><a href="#">Product</a><a href="#">Story</a><a href="#">Journal</a></nav>
+          </header>
+
+          <section class="hero-block">
+            <div class="eyebrow editable-block" data-type="text" data-label="ラベル" contenteditable="true">DESIGNED FOR DEEP WORK</div>
+            <h1 class="editable-block selected" data-type="heading" data-label="メイン見出し" contenteditable="true">Focus,<br><em>beautifully.</em></h1>
+            <p class="lead editable-block" data-type="text" data-label="本文" contenteditable="true">思考の輪郭を研ぎ澄ます、静かで美しいワークスペース。集中するための道具を、ひとつの場所に。</p>
+            <a class="cta editable-block" data-type="button" data-label="ボタン" href="#" contenteditable="true">コレクションを見る <span>→</span></a>
+          </section>
+
+          <section class="feature-row">
+            <div class="feature editable-block" data-type="text" data-label="特徴 1"><strong>01</strong><span>余白から生まれる<br>クリアな思考</span></div>
+            <div class="feature editable-block" data-type="text" data-label="特徴 2"><strong>02</strong><span>必要なものだけを<br>手元に残す</span></div>
+            <div class="feature editable-block" data-type="text" data-label="特徴 3"><strong>03</strong><span>長く使える<br>確かな品質</span></div>
+          </section>
+
+          <div class="selection-box" id="selectionBox" aria-hidden="true">
+            <span class="handle tl"></span><span class="handle tr"></span><span class="handle bl"></span><span class="handle br"></span>
+            <span class="selection-label">H1 · メイン見出し</span>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <aside class="properties" aria-label="プロパティ">
+      <div class="properties-head">
+        <div><span class="section-kicker">選択中</span><h2 id="selectedName">メイン見出し</h2></div>
+        <button class="more-btn" aria-label="その他の操作">•••</button>
+      </div>
+
+      <section class="property-section">
+        <h3>配置</h3>
+        <div class="align-grid" role="group" aria-label="テキスト配置">
+          <button class="active" data-align="left">≡</button><button data-align="center">≣</button><button data-align="right">≡</button><button data-align="justify">☷</button>
+        </div>
+      </section>
+
+      <section class="property-section">
+        <div class="section-title-row"><h3>タイポグラフィ</h3><button class="reset-link" id="resetType">リセット</button></div>
+        <label>フォント
+          <select id="fontFamily">
+            <option value="Arial, sans-serif">Inter</option>
+            <option value="Georgia, serif" selected>Georgia</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="system-ui, sans-serif">System UI</option>
+          </select>
+        </label>
+        <div class="field-pair">
+          <label>サイズ<div class="input-unit"><input id="fontSize" type="number" value="68" min="10" max="160"><span>px</span></div></label>
+          <label>太さ<select id="fontWeight"><option value="400">Regular</option><option value="500">Medium</option><option value="600" selected>Semibold</option><option value="700">Bold</option></select></label>
+        </div>
+        <div class="field-pair">
+          <label>行間<div class="input-unit"><input id="lineHeight" type="number" value="0.98" min="0.7" max="3" step="0.05"><span>×</span></div></label>
+          <label>字間<div class="input-unit"><input id="letterSpacing" type="number" value="-2" min="-10" max="30"><span>px</span></div></label>
+        </div>
+      </section>
+
+      <section class="property-section">
+        <h3>カラー</h3>
+        <div class="color-control">
+          <input type="color" id="textColor" value="#151823" aria-label="文字色">
+          <input type="text" id="colorHex" value="#151823" aria-label="カラーコード">
+          <span>100%</span>
+        </div>
+      </section>
+
+      <section class="property-section">
+        <h3>余白</h3>
+        <div class="spacing-grid">
+          <label><span>上</span><input id="marginTop" type="number" value="0"><small>px</small></label>
+          <label><span>下</span><input id="marginBottom" type="number" value="24"><small>px</small></label>
+        </div>
+      </section>
+
+      <div class="properties-footer">
+        <button id="duplicateBtn">複製</button>
+        <button id="deleteBtn" class="danger">削除</button>
+      </div>
+    </aside>
+
+    <div class="code-drawer" id="codeDrawer" aria-hidden="true">
+      <div class="drawer-head"><div><span class="section-kicker">ソース</span><h2>HTMLコード</h2></div><button id="closeCode" aria-label="閉じる">×</button></div>
+      <textarea id="codeEditor" spellcheck="false"></textarea>
+      <div class="drawer-actions"><span id="codeStatus">変更はキャンバスに反映されます</span><button id="applyCode" class="primary-btn">コードを反映</button></div>
+    </div>
+
+    <div class="layers-popover" id="layersPopover" aria-hidden="true">
+      <h3>ページのレイヤー</h3>
+      <div id="layersList"></div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
