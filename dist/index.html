@@ -14,7 +14,7 @@
         <div class="brand-mark" aria-hidden="true">C</div>
         <div>
           <div class="brand-name">Canvas</div>
-          <div class="file-name"><span id="fileName">product-page.html</span><span class="saved-dot" id="savedDot" aria-hidden="true"></span><span id="saveLabel">自動保存済み</span></div>
+          <div class="file-name"><span id="fileName">product-page.html</span><span class="saved-dot" id="savedDot" aria-hidden="true"></span><span id="saveLabel">端末に保存済み</span></div>
         </div>
       </div>
       <nav class="history-actions" aria-label="編集履歴と表示">
@@ -25,8 +25,14 @@
         <button class="icon-btn" id="mobileBtn" title="モバイル表示" aria-label="モバイル表示">▯</button>
       </nav>
       <div class="top-actions">
-        <input id="fileInput" type="file" accept=".html,.htm,.css,text/html,text/css" multiple hidden />
+        <input id="fileInput" type="file" accept=".html,.htm,.css,.zip,text/html,text/css,application/zip" multiple hidden />
+        <input id="folderInput" type="file" webkitdirectory multiple hidden />
+        <input id="assetInput" type="file" accept="image/*,.svg,.woff,.woff2,.ttf,.otf" multiple hidden />
         <button class="secondary-btn" id="importBtn"><span aria-hidden="true">＋</span> 読み込む</button>
+        <div class="import-menu" id="importMenu" aria-hidden="true">
+          <button data-import="files"><strong>ファイルを選択</strong><span>HTML・CSS・ZIP</span></button>
+          <button data-import="folder"><strong>フォルダを開く</strong><span>画像やフォントもまとめて</span></button>
+        </div>
         <button class="secondary-btn" id="codeBtn"><span aria-hidden="true">&lt;/&gt;</span> コード</button>
         <button class="secondary-btn preview-btn" id="previewBtn"><span aria-hidden="true">◉</span> プレビュー</button>
         <button class="primary-btn" id="exportBtn">ZIP書き出し <span aria-hidden="true">↓</span></button>
@@ -39,6 +45,7 @@
       <button class="rail-item" data-add="text"><span class="rail-icon">¶</span><span>テキスト</span></button>
       <button class="rail-item" data-add="button"><span class="rail-icon">▭</span><span>ボタン</span></button>
       <button class="rail-item" data-add="divider"><span class="rail-icon">―</span><span>区切り線</span></button>
+      <button class="rail-item" id="assetsBtn"><span class="rail-icon">◇</span><span>素材</span><span class="warning-badge" id="assetBadge" hidden>0</span></button>
       <div class="rail-spacer"></div>
       <button class="rail-item" id="layersBtn"><span class="rail-icon">▱</span><span>DOM</span></button>
     </aside>
@@ -46,13 +53,13 @@
     <main class="workspace">
       <div class="workspace-toolbar">
         <div class="breadcrumbs"><span>ページ</span><span>/</span><strong id="crumbName">product-page.html</strong></div>
-        <div class="drop-hint">HTMLとCSSをここへドロップ</div>
+        <div class="drop-hint">フォルダまたはZIPをここへドロップ</div>
         <div class="zoom-control">
           <button id="zoomOut" aria-label="縮小">−</button><span id="zoomLabel">86%</span><button id="zoomIn" aria-label="拡大">＋</button>
         </div>
       </div>
       <div class="stage" id="stage">
-        <div class="drop-overlay" id="dropOverlay"><strong>ファイルをドロップ</strong><span>HTMLとCSSを同時に読み込めます</span></div>
+        <div class="drop-overlay" id="dropOverlay"><strong>Webサイト一式をドロップ</strong><span>フォルダ・ZIP・HTML/CSSに対応</span></div>
         <div class="page-wrap" id="pageWrap">
           <div class="page-badge">LIVE DOCUMENT · <span id="viewportLabel">DESKTOP</span></div>
           <div class="page-surface" id="pageSurface">
@@ -127,6 +134,17 @@
     <div class="layers-popover" id="layersPopover" aria-hidden="true">
       <div class="layers-head"><div><span class="section-kicker">構造</span><h3>DOMツリー</h3></div><span>ドラッグで並べ替え</span></div>
       <div id="layersList"></div>
+    </div>
+
+    <div class="assets-popover" id="assetsPopover" aria-hidden="true">
+      <div class="assets-head">
+        <div><span class="section-kicker">端末内の素材</span><h3>アセット</h3></div>
+        <button id="addAssetBtn">＋ 追加</button>
+      </div>
+      <div class="asset-summary" id="assetSummary">素材はまだありません</div>
+      <div class="missing-list" id="missingList" hidden></div>
+      <div class="asset-grid" id="assetGrid"></div>
+      <div class="asset-files" id="assetFiles"></div>
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
