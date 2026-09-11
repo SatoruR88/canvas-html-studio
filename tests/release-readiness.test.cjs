@@ -25,15 +25,20 @@ test('quick start, help, keyboard reference, and persistent import errors are av
 });
 
 test('release identity, version, and local-only policy stay aligned', () => {
-  const version = '0.1.0';
+  const version = '0.1.1';
   assert.equal(desktopPackage.version, version);
   assert.equal(tauriConfig.version, version);
-  assert.match(cargoManifest, /^version = "0\.1\.0"$/m);
+  assert.match(cargoManifest, /^version = "0\.1\.1"$/m);
   assert.match(html, new RegExp(`id="appVersion">${version}<`));
   assert.match(html, /一人で使うローカル編集アプリ/);
   assert.match(html, /共有機能やアカウント連携は使用しません/);
   assert.equal(tauriConfig.productName, 'Canvas HTML Studio');
   assert.equal(tauriConfig.identifier, 'studio.canvas.html');
+});
+
+test('release builds use the Windows GUI subsystem without a command prompt', () => {
+  const main = fs.readFileSync(path.join(desktopRoot, 'src-tauri', 'src', 'main.rs'), 'utf8');
+  assert.match(main, /^#!\[cfg_attr\(not\(debug_assertions\), windows_subsystem = "windows"\)\]/);
 });
 
 test('import validation rejects traversal, absolute paths, duplicates, and oversized projects', () => {
