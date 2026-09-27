@@ -2,7 +2,7 @@
 name = "canvas-html-studio"
 version = "0.1.1"
 description = "Local-first visual HTML editor"
-authors = ["Canvas HTML Studio"]
+authors = ["SatoruR88"]
 license = "MIT"
 edition = "2021"
 

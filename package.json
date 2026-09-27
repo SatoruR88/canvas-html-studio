@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.1",
   "description": "Local-first visual HTML editor",
+  "author": "SatoruR88",
   "license": "MIT",
   "scripts": {
     "tauri": "tauri",

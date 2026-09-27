@@ -29,6 +29,8 @@
     "active": true,
     "targets": ["nsis"],
     "icon": ["icons/icon.ico"],
+    "publisher": "SatoruR88",
+    "copyright": "Copyright (c) 2026 SatoruR88",
     "category": "DeveloperTool",
     "licenseFile": "../LICENSE.txt",
     "shortDescription": "HTMLを直接編集できるビジュアルエディター",
