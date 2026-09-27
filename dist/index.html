@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="stage" id="stage">
-        <div class="drop-overlay" id="dropOverlay"><strong>ファイルまたはWebサイト一式をドロップ</strong><span>Markdown・フォルダ・ZIP・HTML/CSSに対応</span></div>
+        <div class="drop-overlay"><strong>ファイルまたはWebサイト一式をドロップ</strong><span>Markdown・フォルダ・ZIP・HTML/CSSに対応</span></div>
         <div class="page-wrap" id="pageWrap">
           <div class="page-badge">LIVE DOCUMENT · <span id="viewportLabel">DESKTOP</span></div>
           <div class="page-surface" id="pageSurface">
@@ -100,7 +100,7 @@
           <button class="active" data-align="left">≡</button><button data-align="center">≣</button><button data-align="right">≡</button><button data-align="justify">☷</button>
         </div>
       </section>
-      <section class="property-section object-actions" id="objectActions">
+      <section class="property-section object-actions">
         <h3>整列と配置</h3>
         <div class="object-align-grid" role="group" aria-label="選択した要素を整列">
           <button data-object-align="left" title="左揃え">左</button><button data-object-align="center" title="左右中央揃え">左右中央</button><button data-object-align="right" title="右揃え">右</button>
@@ -132,7 +132,7 @@
         </div>
         <p class="scope-note" id="scopeNote">要素へ直接適用します</p>
       </section>
-      <section class="property-section" id="elementSection">
+      <section class="property-section">
         <h3>要素</h3>
         <label>ID<input id="elementId" type="text" placeholder="例: main-title"></label>
         <label class="conditional-field" id="headingField" hidden>見出しレベル<select id="headingLevel"><option value="H1">H1</option><option value="H2">H2</option><option value="H3">H3</option><option value="H4">H4</option><option value="H5">H5</option><option value="H6">H6</option></select></label>
@@ -235,7 +235,7 @@
       <div class="drawer-head"><div><span class="section-kicker">ソース</span><h2>コード編集</h2></div><button id="closeCode" aria-label="閉じる">×</button></div>
       <div class="code-tabs" role="tablist"><button class="active" data-code-tab="html">HTML</button><button data-code-tab="css">CSS</button></div>
       <textarea id="codeEditor" spellcheck="false" aria-label="コードエディター"></textarea>
-      <div class="drawer-actions"><span id="codeStatus">変更はキャンバスに反映されます</span><button id="applyCode" class="primary-btn">コードを反映</button></div>
+      <div class="drawer-actions"><span>変更はキャンバスに反映されます</span><button id="applyCode" class="primary-btn">コードを反映</button></div>
     </div>
 
     <div class="layers-popover" id="layersPopover" aria-hidden="true">
@@ -288,7 +288,7 @@
         <div class="dialog-head"><div><span class="section-kicker">ページ</span><h2>新しいHTMLページ</h2></div><button value="cancel" aria-label="閉じる">×</button></div>
         <label>ファイル名<input id="pageNameInput" type="text" value="about.html" autocomplete="off" required></label>
         <p class="dialog-error" id="pageError" role="alert"></p>
-        <div class="dialog-actions"><button value="cancel">キャンセル</button><button class="primary-btn" id="createPageBtn" value="default">作成</button></div>
+        <div class="dialog-actions"><button value="cancel">キャンセル</button><button class="primary-btn" value="default">作成</button></div>
       </form>
     </dialog>
 
@@ -339,7 +339,7 @@
         <label>起動時の表示<select id="viewportSetting"><option value="desktop">デスクトップ</option><option value="mobile">モバイル</option></select></label>
         <label>初期ズーム<input id="zoomSetting" type="number" min="50" max="120" step="1"><span class="input-suffix">%</span></label>
         <section class="app-info" aria-labelledby="appInfoTitle">
-          <div><h3 id="appInfoTitle">Canvas HTML Studio</h3><span>バージョン <strong id="appVersion">0.1.1</strong></span></div>
+          <div><h3 id="appInfoTitle">Canvas HTML Studio</h3><span>バージョン <strong>0.1.1</strong></span></div>
           <p>一人で使うローカル編集アプリです。開いたサイトとバックアップは端末内で処理し、共有機能やアカウント連携は使用しません。</p>
         </section>
         <div class="dialog-actions"><button id="resetSettingsBtn" value="cancel">初期値に戻す</button><button class="primary-btn" value="default">保存</button></div>

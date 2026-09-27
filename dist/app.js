@@ -1809,8 +1809,6 @@ function outputHTMLForPage(page) {
   return `<!doctype html>\n<html lang="ja">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>${escapeHTML(page.title)}</title>\n  ${head.innerHTML.trim()}\n</head>\n<body>\n${parsed.body.innerHTML.trim()}\n${(page.scripts || '').trim()}\n</body>\n</html>`;
 }
 
-function outputHTML() { syncActivePageRecord(); return outputHTMLForPage(project.pages.find(page => page.htmlPath === project.htmlPath) || project); }
-
 const crcTable = (() => { const table = new Uint32Array(256); for (let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?0xedb88320^(c>>>1):c>>>1; table[n]=c>>>0; } return table; })();
 function crc32(bytes) { let c=0xffffffff; for(const byte of bytes)c=crcTable[(c^byte)&255]^(c>>>8); return (c^0xffffffff)>>>0; }
 function write16(view, offset, value){ view.setUint16(offset,value,true); }
@@ -1892,8 +1890,6 @@ document.getElementById('closeReferenceBtn').addEventListener('click', () => ref
 document.getElementById('closeReferenceAction').addEventListener('click', () => referenceDialog.close());
 
 function closeStartScreen() { document.getElementById('startScreen').classList.add('closed'); }
-function openStartScreen() { updateRecoveryUI(); document.getElementById('startScreen').classList.remove('closed'); }
-
 async function createFreshProject(kind) {
   const sample = kind === 'sample';
   const page = {
